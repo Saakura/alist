@@ -35,7 +35,8 @@ jobs:
           mv dist/* alist/public
           bash build.sh release
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
         with:
-          files: alist/build/compress/*
+          name: artifact
+          path: alist/build/compress
