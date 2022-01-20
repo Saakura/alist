@@ -137,7 +137,7 @@ elif [ "$1" = "docker" ]; then
 elif [ "$1" = "build" ]; then
   BUILD build
 elif [ "$1" = "release" ]; then
-  BUILD release
+#   BUILD release
   BUILD_MUSL
   RELEASE
 else
