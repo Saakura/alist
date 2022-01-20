@@ -125,6 +125,10 @@ func Proxy(c *gin.Context) {
 			common.ErrorResp(c, err, 500)
 			return
 		}
+		defer func() {
+			_ = res.Body.Close()
+		}()
+		log.Debugf("proxy status: %d", res.StatusCode)
 		w.WriteHeader(res.StatusCode)
 		for h, v := range res.Header {
 			w.Header()[h] = v
@@ -146,7 +150,13 @@ func init() {
 }
 
 func Text(c *gin.Context, link *base.Link) {
-	res, err := client.R().Get(link.Url)
+	req := client.R()
+	if link.Headers != nil {
+		for _, header := range link.Headers {
+			req.SetHeader(header.Name, header.Value)
+		}
+	}
+	res, err := req.Get(link.Url)
 	if err != nil {
 		common.ErrorResp(c, err, 500)
 		return
